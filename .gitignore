@@ -1,0 +1,11 @@
+# images are not stored in the repository (lists + licences are in data/*.csv)
+data/raw/
+data/clean/
+data/ood/
+data/trashnet/
+data/external/
+data/manifest_*.csv
+models/*.npz
+__pycache__/
+*.log
+.venv/

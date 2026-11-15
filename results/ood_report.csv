@@ -1,0 +1,6 @@
+model,method,threshold,auroc_val,auroc_test,waste_accepted_test,non_waste_rejected_test
+Random Forest (HSV+HOG+LBP),msp,0.205,0.5914,0.5466,0.9498,0.0443
+XGBoost (HSV+HOG+LBP),msp,0.2944,0.5967,0.5902,0.9427,0.057
+MobileNetV2 (fine-tuned CNN),msp,0.3382,0.76,0.8121,0.9821,0.1899
+MobileNetV2 (fine-tuned CNN),centroid,0.4133,0.7962,0.8192,0.9606,0.2911
+Hybrid (CNN embeddings + XGBoost),msp,0.4337,0.7756,0.8348,0.9749,0.2468

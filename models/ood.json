@@ -1,0 +1,18 @@
+{
+ "rf": {
+  "method": "msp",
+  "threshold": 0.205
+ },
+ "xgb": {
+  "method": "msp",
+  "threshold": 0.29438668489456177
+ },
+ "cnn": {
+  "method": "centroid",
+  "threshold": 0.4133468568325043
+ },
+ "hybrid": {
+  "method": "msp",
+  "threshold": 0.43372732400894165
+ }
+}

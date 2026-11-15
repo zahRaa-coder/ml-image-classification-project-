@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EcoScan AI</title>
+  <meta name="description" content="Photograph one item of waste and find out which recycling bin it belongs in.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23800020'/><text x='50' y='70' font-size='60' text-anchor='middle'>♻</text></svg>">
+</head>
+<body>
+  <!-- reusable bin icon -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="bin" viewBox="0 0 64 72">
+      <rect x="22" y="2" width="20" height="7" rx="3" class="lidtop"/>
+      <rect x="6" y="8" width="52" height="10" rx="4" class="lid"/>
+      <path d="M11 20h42l-4 46a5 5 0 0 1-5 4H20a5 5 0 0 1-5-4z" class="body"/>
+      <path d="M24 28v32M32 28v32M40 28v32" class="ribs"/>
+    </symbol>
+  </svg>
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo"><svg viewBox="0 0 64 72"><use href="#bin"/></svg></span>
+      EcoScan <b>AI</b>
+    </div>
+    <button id="themeBtn" class="icon-btn" aria-label="Toggle dark mode">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" fill="currentColor"/></svg>
+    </button>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Which bin<br>does it go in?</h1>
+      <p>Photograph one item. EcoScan names the material, picks the bin, and shows you
+        which part of the photo it looked at.</p>
+    </section>
+
+    <section class="bins" id="bins" aria-label="Waste types">
+      {% for c in class_info %}
+      <div class="bin-slot" data-slug="{{ c.slug }}" style="--binc: {{ c.color }}">
+        <svg viewBox="0 0 64 72"><use href="#bin"/></svg>
+        <span>{{ c.name }}</span>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="card scan-card">
+      <label id="drop" class="drop" for="file">
+        <input id="file" type="file" accept="image/*" hidden>
+        <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+        <div class="drop-inner" id="dropInner">
+          <div class="drop-icon">📷</div>
+          <div class="drop-title">Drop a photo here</div>
+          <div class="muted">or click to browse / take a photo · JPG, PNG, WEBP up to 10 MB</div>
+          <div class="muted small">Tip: one item, plain background, good light.</div>
+        </div>
+        <img id="preview" alt="" hidden>
+      </label>
+      <div class="controls">
+        <label class="muted" for="model">Model</label>
+        <select id="model">
+          {% for m in models %}
+          <option value="{{ m.key }}" {{ 'selected' if m.key == default }}>
+            {{ m.name }}{% if m.acc %} ({{ '%.0f' % (m.acc*100) }}% test accuracy){% endif %}</option>
+          {% endfor %}
+        </select>
+        <button id="go" class="btn" disabled>Identify item</button>
+      </div>
+      <p id="error" class="error" hidden></p>
+    </section>
+
+    <section id="results" class="results" hidden>
+      <div class="card">
+        <div class="card-head"><h2>Best guesses</h2><span class="pill" id="meta"></span></div>
+        <div id="unknown" class="unknown" hidden>
+          <b>Not sure this is one of the {{ class_info|length }} waste types.</b>
+          <span>The photo looks too different from the training images (score <span id="score"></span>
+            &lt; threshold <span id="thr"></span>), so no bin is suggested. The guesses below are for information only.</span>
+        </div>
+        <ol id="preds" class="preds"></ol>
+      </div>
+
+      <div class="card bin-card" id="binCard">
+        <div class="bin-head">
+          <svg class="bin-head-icon" viewBox="0 0 64 72"><use href="#bin"/></svg>
+          <div>
+            <h2 id="bName">—</h2>
+            <div id="bBin"></div>
+          </div>
+          <span class="pill light" id="bRec"></span>
+        </div>
+        <div class="bin-body">
+          <ul class="tips" id="bTips"></ul>
+          <p class="fact" id="bFact"></p>
+          <p class="muted small">{{ bin_note }}</p>
+        </div>
+      </div>
+
+      <div class="card xai">
+        <div class="card-head"><h2>Where it looked</h2>
+          <div class="seg"><button data-v="cam" class="on">Heatmap</button><button data-v="orig">Original</button></div>
+        </div>
+        <img id="cam" alt="Grad-CAM heatmap">
+        <p class="muted small">Grad-CAM (Explainable AI): red areas influenced the CNN's top prediction the most.</p>
+      </div>
+    </section>
+
+    <details class="card about">
+      <summary>How it works</summary>
+      <p class="muted">Training images were collected online (Wikimedia Commons, Flickr – open licences, source and
+        licence recorded for every image) and labelled per class. Three models are compared: Random Forest / XGBoost on
+        handcrafted features, a fine-tuned MobileNetV2 CNN, and a hybrid (CNN features + XGBoost). Photos that are not
+        waste are reported as "not sure" instead of being forced into a class.</p>
+    </details>
+  </main>
+  <footer>EcoScan AI · BLM22325E Introduction to Machine Learning</footer>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

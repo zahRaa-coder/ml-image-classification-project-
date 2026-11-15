@@ -1,0 +1,81 @@
+{
+ "_meta": {
+  "note": "General guidance. Recycling rules differ between municipalities - always check the local rules printed on the bins.",
+  "sources": [
+   "US EPA - How do I recycle common recyclables: https://www.epa.gov/recycle/how-do-i-recycle-common-recyclables",
+   "T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı - Sıfır Atık (Zero Waste) colour code"
+  ]
+ },
+ "cardboard": {
+  "name": "Cardboard",
+  "bin": "Paper / cardboard recycling",
+  "color": "#a0714f",
+  "recyclable": true,
+  "tips": [
+   "Flatten boxes to save space",
+   "Remove tape, plastic film and foam",
+   "Greasy pizza boxes go to general waste"
+  ],
+  "fact": "Cardboard can be recycled 5–7 times before the fibres become too short."
+ },
+ "glass": {
+  "name": "Glass",
+  "bin": "Glass recycling",
+  "color": "#3f8f6b",
+  "recyclable": true,
+  "tips": [
+   "Rinse bottles and jars",
+   "Remove metal caps (recycle them with metal)",
+   "Window glass, mirrors and ceramics are NOT accepted"
+  ],
+  "fact": "Glass can be recycled endlessly without losing quality."
+ },
+ "metal": {
+  "name": "Metal",
+  "bin": "Metal / packaging recycling",
+  "color": "#7c8592",
+  "recyclable": true,
+  "tips": [
+   "Empty and rinse cans",
+   "Aluminium foil is recyclable if clean",
+   "Aerosol cans only when completely empty"
+  ],
+  "fact": "Recycling aluminium saves about 95% of the energy needed to make it from raw ore."
+ },
+ "paper": {
+  "name": "Paper",
+  "bin": "Paper / cardboard recycling",
+  "color": "#3f6fb0",
+  "recyclable": true,
+  "tips": [
+   "Keep paper dry and clean",
+   "Shredded paper: put it in a paper bag",
+   "Tissues and napkins go to general waste"
+  ],
+  "fact": "Paper fibres can be recycled about 5–7 times."
+ },
+ "plastic": {
+  "name": "Plastic",
+  "bin": "Plastic / packaging recycling",
+  "color": "#d08a2e",
+  "recyclable": true,
+  "tips": [
+   "Empty and rinse containers",
+   "Put caps back on bottles",
+   "Check the recycling number (1 PET and 2 HDPE are most widely accepted)"
+  ],
+  "fact": "Only about 9% of all plastic ever produced has been recycled - sorting correctly matters."
+ },
+ "trash": {
+  "name": "General waste",
+  "bin": "General (non-recyclable) waste",
+  "color": "#4b4b55",
+  "recyclable": false,
+  "tips": [
+   "Dirty or mixed-material packaging belongs here",
+   "Batteries and electronics need special collection points",
+   "Food scraps: use compost / organic bins where available"
+  ],
+  "fact": "Reducing and reusing comes before recycling in the waste hierarchy."
+ }
+}
